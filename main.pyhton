@@ -1,0 +1,76 @@
+import datetime
+
+class MoodTracker:
+    def __init__(self):
+        self.logs = []
+
+    def add_entry(self, mood, note):
+        self.logs.append({
+            "date": datetime.date.today(),
+            "mood": mood,
+            "note": note
+        })
+
+    def show_logs(self):
+        print("\n📖 Mood History:")
+        for entry in self.logs:
+            print(f"{entry['date']} - {entry['mood']} - {entry['note']}")
+
+class AIAdvisor:
+    def __init__(self, tracker):
+        self.tracker = tracker
+
+    def analyze(self):
+        if not self.tracker.logs:
+            return "No data yet!"
+
+        mood_score = 0
+        for entry in self.tracker.logs:
+            if entry["mood"] == "happy":
+                mood_score += 2
+            elif entry["mood"] == "neutral":
+                mood_score += 1
+            elif entry["mood"] == "sad":
+                mood_score -= 2
+
+        avg = mood_score / len(self.tracker.logs)
+
+        if avg > 1:
+            return "You're doing great! Keep it up 😊"
+        elif avg > 0:
+            return "You're okay, but try relaxing activities 🧘"
+        else:
+            return "You seem stressed. Take breaks and talk to someone 💬"
+
+def main():
+    tracker = MoodTracker()
+    ai = AIAdvisor(tracker)
+
+    while True:
+        print("\n1. Add Mood")
+        print("2. View History")
+        print("3. AI Suggestion")
+        print("4. Exit")
+
+        choice = input("Enter choice: ")
+
+        if choice == "1":
+            mood = input("Enter mood (happy/neutral/sad): ").lower()
+            note = input("Add note: ")
+            tracker.add_entry(mood, note)
+            print("✅ Mood added!")
+
+        elif choice == "2":
+            tracker.show_logs()
+
+        elif choice == "3":
+            print("🤖 AI:", ai.analyze())
+
+        elif choice == "4":
+            break
+
+        else:
+            print("Invalid choice!")
+
+if __name__ == "__main__":
+    main()
